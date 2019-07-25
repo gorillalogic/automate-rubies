@@ -12,12 +12,12 @@ def submit_form(driver)
   driver.find_element(id: 'first-name').send_keys($first_name)
   driver.find_element(id: 'last-name').send_keys($last_name)
   driver.find_element(id: 'job-title').send_keys($job_title)
-  driver.find_element(id: 'radio-button-2').click
-  driver.find_element(id: 'checkbox-2').click
-  driver.find_element(css: 'option[value="2"]').click
+  driver.find_element(id: 'radio-button-2').click()
+  driver.find_element(id: 'checkbox-2').click()
+  driver.find_element(css: 'option[value="2"]').click()
   driver.find_element(id: 'datepicker').send_keys($date)
-  driver.find_element(id: 'datepicker').send_keys :return
-  driver.find_element(css: '.btn.btn-lg.btn-primary').click
+  driver.find_element(id: 'datepicker').send_keys(:return)
+  driver.find_element(css: '.btn.btn-lg.btn-primary').click()
 end
 
 def get_banner_text(driver)
