@@ -12,7 +12,9 @@ end
 
 RSpec::Core::RakeTask.new(:spec) do |t|
 t.pattern = Dir.glob('tests/**/*_test.rb')
-t.rspec_opts = '--format documentation'
+t.rspec_opts = '--format html'
+
+ t.rspec_opts << ' --out results.html'
 # t.rspec_opts << ' more options'
 
 end
