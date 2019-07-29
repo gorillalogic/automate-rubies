@@ -15,6 +15,20 @@ class OrdersPage < TravelsBasePage
     offers
   end
 
+  def offersPackage(packageName)
+    $itOffers = false
+    offers = listOfOffers()
+    offers.each do |offer|
+      $offerText = offer.find_element(css: '.panel-heading')
+      if ($offerText.text.include? packageName)
+         $itOffers = true 
+         break
+      end
+    end
+
+    $itOffers
+  end
+
   def getAmountOfOffers ()
     $offers = listOfOffers()
     $offers.count()

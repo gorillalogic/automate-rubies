@@ -22,5 +22,27 @@ describe "Verify PHPTravels.com site" do
     expect($result).to be(4)
   end
 
+  it "offers Standalone Web Apps" do
+    orders = OrdersPage.new(@driver)
+    
+    $result = orders.offersPackage("Standalone Web")
+    
+    expect($result).to be(true)
+  end
+
+  it "offers Windows Desktop App" do
+    orders = OrdersPage.new(@driver)
+    
+    $result = orders.offersPackage("Windows Desktop")
+    
+    expect($result).to be(true)
+  end
  
+  it "offers Complete Bundle" do
+    orders = OrdersPage.new(@driver)
+    
+    $result = orders.offersPackage("Complete Bundle")
+    
+    expect($result).to be(true)
+  end
 end
