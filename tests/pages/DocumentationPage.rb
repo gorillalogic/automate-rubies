@@ -1,26 +1,28 @@
-require "selenium-webdriver"
-require_relative "TravelsBasePage"
+# frozen_string_literal: true
+
+require 'selenium-webdriver'
+require_relative 'TravelsBasePage'
 
 class DocumentationPage < TravelsBasePage
-  
-  def initialize (driver)
-    @url = "https://phptravels.com/documentation/"
+  def initialize(driver)
+    @url = 'https://phptravels.com/documentation/'
+    @logger.log("Created :#{self.class.name}")
     super(driver)
     @driver.navigate.to @url
   end
 
-  def searchFor (field)
+  def searchFor(field)
     searchField = @driver.find_element(id: 'docsQuery')
     searchField.send_keys(field)
     sleep 2
   end
 
-  def containsDoc (element)
+  def containsDoc(element)
     $documents = @driver.find_elements(css: '#mw-content-text > div.row > div.col-sm-4')
     $result = false
     $documents.each do |document|
       puts(document.text)
-      if (document.text.include? element)
+      if document.text.include? element
         $result = true
         break
       end
