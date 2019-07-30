@@ -3,8 +3,8 @@
 require 'selenium-webdriver'
 require 'rspec'
 require 'chromedriver-helper'
-require_relative '../pages/demo/HomePage'
-require_relative '../pages/demo/TourDetailsPage'
+require_relative '../../pages/demo/HomePage'
+require_relative '../../pages/demo/TourDetailsPage'
 
 describe 'PHPTravels Demo' do
   before(:each) do

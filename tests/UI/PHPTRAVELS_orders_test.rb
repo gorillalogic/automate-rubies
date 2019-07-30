@@ -3,7 +3,7 @@
 require 'selenium-webdriver'
 require 'rspec'
 require 'chromedriver-helper'
-require_relative '../pages/OrdersPage'
+require_relative '../../pages/OrdersPage'
 
 describe 'Verify PHPTravels.com site' do
   before(:each) do

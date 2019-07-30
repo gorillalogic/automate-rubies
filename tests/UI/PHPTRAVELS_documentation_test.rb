@@ -1,7 +1,7 @@
 require "selenium-webdriver"
 require "rspec"
 require "chromedriver-helper"
-require_relative "../pages/DocumentationPage"
+require_relative "../../pages/DocumentationPage"
 
 describe "Verify PHPTravels.com site" do
   

@@ -6,7 +6,7 @@ require_relative 'TravelsBasePage'
 class DocumentationPage < TravelsBasePage
   def initialize(driver)
     @url = 'https://phptravels.com/documentation/'
-    
+
     super(driver)
     @driver.navigate.to @url
     @logger.warn("Created :#{self.class.name}")
@@ -22,7 +22,7 @@ class DocumentationPage < TravelsBasePage
     $documents = @driver.find_elements(css: '#mw-content-text > div.row > div.col-sm-4')
     $result = false
     $documents.each do |document|
-      puts(document.text)
+      @logger.warn("::: #{document.text} ::::")
       if document.text.include? element
         $result = true
         break
