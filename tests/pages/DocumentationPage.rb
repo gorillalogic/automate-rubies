@@ -6,9 +6,10 @@ require_relative 'TravelsBasePage'
 class DocumentationPage < TravelsBasePage
   def initialize(driver)
     @url = 'https://phptravels.com/documentation/'
-    @logger.log("Created :#{self.class.name}")
+    
     super(driver)
     @driver.navigate.to @url
+    @logger.warn("Created :#{self.class.name}")
   end
 
   def searchFor(field)

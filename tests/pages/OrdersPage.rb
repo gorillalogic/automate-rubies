@@ -6,15 +6,15 @@ require_relative 'TravelsBasePage'
 class OrdersPage < TravelsBasePage
   def initialize(driver)
     @url = 'https://phptravels.com/order/'
-    @logger.log("Created :#{self.class.name}")
-    @offersSelector = 'body > div:nth-child(9) > div.tab-content > div'
+    @offersSelector = '.tab-content .col-md-3'
     super(driver)
     @driver.navigate.to @url
-    @logger.info("Created: #{self.class.name}")
+    @logger.info("Created #{self.class.name}")
   end
 
   def listOfOffers
     offers = @driver.find_elements(css: @offersSelector)
+    @logger.warn("There are #{offers.count} offers" )
     offers
   end
 
