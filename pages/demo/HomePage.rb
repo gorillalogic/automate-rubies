@@ -8,6 +8,7 @@ class HomePage < TravelsBasePage
     # Vars
     @url = 'https://phptravels.net'
     @toursListSelector = '.hotel-list .col-md-3'
+    @currencyButtonSelector = 'nav div.collapse.navbar-collapse > .nav.navbar-nav.navbar-right.hidden-sm.go-left li.dropdown > a'
 
     # Initializers
     super(driver)
@@ -17,7 +18,7 @@ class HomePage < TravelsBasePage
 
   def toursList
     @driver.action.move_to(@driver.find_element(css: '.more')).perform
-   
+
     $tours = @driver.find_elements(css: @toursListSelector)
     $tours
   end
@@ -32,6 +33,18 @@ class HomePage < TravelsBasePage
       end
     end
     $tour
+  end
+
+  def setSiteCurrency(currencyName)
+    # Click the currency bottom
+    @driver.find_element(css: @currencyButtonSelector).click
+    # Click the list element for the currency passed as param
+    currencies = @driver.find_elements(css: '.nav.navbar-nav.navbar-right.hidden-sm.go-left > ul > .dropdown li')
+
+    currencies.each { |currency| currency.click if currency.text.include? currencyName }
+    # wait a pair of secs
+    @logger.info("Currency set to: #{currencyName}")
+    sleep 1
   end
 
   ##
