@@ -183,7 +183,7 @@ This first page does not do a lot, yet gives us a glimpse of the power of classe
 #### Implicit Wait
 ` @driver.manage.timeouts.implicit_wait = 10` 
 
-Here we have a powerful concept of Webdriver, Implicit wait. UI tests usually execute at a blazing pace, and it is common to have failing tests because the **webdriver works faster than the application under test.** Implicit wait orders the webdriver to continuously verify if an element is available and **fail only if more than certain amount of time has passed** (10 minutes in this case)
+Here we have a powerful concept of Webdriver, Implicit wait. UI tests usually execute at a blazing pace, and it is common to have failing tests because the **webdriver works faster than the application under test.** Implicit wait orders the webdriver to continuously verify if an element is available and **fail only if more than certain amount of time has passed** (10 seconds in this case)
 
 Implicit wait allows to have cleaner code and sturdier tests that do not fail as often for delays in the application under test.
 
@@ -288,24 +288,32 @@ end
 Now let's create a test that will use our `OrdersPage`.
 
 Go to the root of our project, and execute the following commands:
+
+
 ```bash
-$ mkdir tests -p tests/UI @@ cd tests/UI
+$ mkdir -p tests/UI @@ cd tests/UI
 $ touch PHPTRAVELS_orders_test.rb 
 ```
-Remember, a clean code, is a happy code
+It is important to separate our `pages` code from our `tests` code.
+
+Remember,  **a clean code, is a happy code**.
 
 ### Rspec
-Rspec is a test execution framework for Ruby, pretty similar to JUnit or Jasmine. It is simple to use, I will show you how it works:
+Rspec is a test execution framework for Ruby, pretty similar to JUnit or Jasmine. It is simple to use, has great tooling and good support for reporting; I will show you how it works:
 
 First of all, let's add the gem we need, open the `Gemfile` and add:
 ```Gemfile
 source 'https://rubygems.org'
 gem 'selenium-webdriver'
 gem 'chromedriver-helper'
-gem 'rspec' # Lets add the dependency
+# Here it comes Rspec
+gem 'rspec'
 ```
 
-execute `$ bundle install` in a console and the dependency is added to our repo
+```sh
+$ bundle install
+```
+Run **bundler** again in a console and the dependency is added to our repo
 
 In our `PHPTRAVELS_orders_test.rb ` add the following code
 
