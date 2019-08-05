@@ -1,11 +1,13 @@
 # Make Testing Great Again: Powerful UI tests with Ruby, Rspec, Rake and Webdriver
+
+#### With :heart: by [Frederik Rodriguez](https://github.com/frederikrodriguezGL)
 ![Image](images/head.png)
 
 
 ## Introduction
-Though most of newest FrontEnd Development projects have moved to Javascript Frameworks, leaving Fullstack frameworks (e.g JSP, ASP.Net and Ruby on Rails) in the water, still there are dozens of projects and customers out there with Rails projects, and even some of them have migrated their stacks to have API's based on Rails and FrontEnd in React, Angular or whatever poison they want to drink. 
+Though most of newest FrontEnd Development projects have moved to Javascript Frameworks, leaving Fullstack frameworks (e.g JSP, ASP.Net and Ruby on Rails) in the water, still there are dozens of projects and customers out there with Rails projects; and even some of them have migrated their stacks to have API's based on Rails, and FrontEnd in React, Angular or whatever poison they want to drink. 
 
-Here is the sweetspot we want to manage here. These projects have a strong investment in Ruby code, seasoned developers polished in the arts of ruby and Testing based on those. Currently is extremely hard to find available Automators with Ruby experience and here is where this article fits in, Today we will teach you the arts of creating a Testing Project using the Ruby language and the available tools. 
+Here is the sweetspot where we want to work with. These projects have a strong investment in Ruby code, seasoned developers polished in the arts of Ruby and Testing based on that. Currently is extremely hard to find available Automators with Ruby expertise and here is where this article fits in, Today we will teach you the arts of creating a Testing Project using the Ruby language and the available tools. 
 
 This will be our agenda for this article
 - Tools Installation and what do they do
@@ -13,7 +15,7 @@ This will be our agenda for this article
 - Improving code with the **Page Object Model** Pattern, 
 - Executing tests with **RSpec** and **Rake**, 
 - Keeping all dependencies in check with **Bundler**
-- **WebDrivers** and the tools in ruby for it
+- **WebDrivers** and the tools in **Ruby** for it
 - and so on
 
 
@@ -22,7 +24,7 @@ This will be our agenda for this article
 ### Ruby
 Ruby is an **interpreted**, **multipurpose**, **multiparadigm**, **Object-Based**, **Hardtyped** programming language, that receives a lot of praise for the simplicity of their syntax and the powerful Rails framework
 
-Install ruby is not hard, actually comes preinstalled in most MacOS X distributions, just in case you want to have the latest version use `RVM`
+Install Ruby is not hard, actually comes preinstalled in most MacOS X distributions, just in case you want to have the latest version use `RVM`
 
 Open [rvm.io](https://rvm.io/) and follow the instructions to install the manager
 
@@ -44,7 +46,7 @@ $ gem install bundler
 ```
 
 ### Bundler
-Bundler is a powerful dependencies manager for ruby, Similar to `NPM` or `Maven` or `NuGet`
+**Bundler** is a powerful dependencies manager for Ruby, Similar to `NPM` or `Maven` or `NuGet`
 
 Let's open our project directory and create our Gemfile, this file will allow us to have our list of gems to install, and simplify for future developers to have the environment ready in less time.
 
@@ -66,7 +68,7 @@ gem 'selenium-webdriver'
 ### Webdriver
 `Webdriver` is a framework that allows to simulate human interaction with a browser, using a couple of lines of code, you can open a webpage, write a query and hit the search button.
 
-Webdriver is mature, has evolved well with time, and it has support for a **dozen of different programming languages** and all of the **major browsers** out there, of course, ruby is included.
+Webdriver is mature, has evolved well with time, and it has support for a **dozen of different programming languages** and all of the **major browsers** out there, of course, Ruby is included.
 
 After we have the Gemfile updated, we run the following command:
 
@@ -157,7 +159,7 @@ require 'selenium-webdriver'
 
 class TravelsBasePage #::Class:: is the  keyword 
  
- def initialize(driver) # Initialize is the method invoked by ruby when a new class is invoked
+ def initialize(driver) # Initialize is the method invoked by Ruby when a new class is invoked
     @driver = driver # Lets share the same driver always
 
     # Set configurations for driver, global for all objects that use this driver
@@ -293,7 +295,7 @@ $ touch PHPTRAVELS_orders_test.rb
 Remember, a clean code, is a happy code
 
 ### Rspec
-Rspec is a test execution framework for ruby, pretty similar to JUnit or Jasmine. It is simple to use, I will show you how it works:
+Rspec is a test execution framework for Ruby, pretty similar to JUnit or Jasmine. It is simple to use, I will show you how it works:
 
 First of all, let's add the gem we need, open the `Gemfile` and add:
 ```Gemfile
@@ -303,7 +305,7 @@ gem 'chromedriver-helper'
 gem 'rspec' # Lets add the dependency
 ```
 
-execute `$ bundler install` in a console and the dependency is added to our repo
+execute `$ bundle install` in a console and the dependency is added to our repo
 
 In our `PHPTRAVELS_orders_test.rb ` add the following code
 
@@ -388,7 +390,7 @@ This is what our new method does:
 
 -  Uses the `listOfOffers()` logic to get all of the offers
 -  iterate thru them `offers.each do |offer|`  
--  when the name of the offer `$offerText = offer.find_element(css: '.panel-heading')`  matches the parameter `$offerText = offer.find_element(css: '.panel-heading')`
+-  when the name of the offer `$offerText = offer.find_element(css: '.panel-heading')`  matches the parameter `$offerText.text.include? packageName`
 -  returns `true`
 -  returns `false` if no Offer is sold with the given name.
   
@@ -477,7 +479,7 @@ gem 'rake'
 
 Update the dependencies
 ```bash
-$ bundler install
+$ bundle install
 ```
 
 
