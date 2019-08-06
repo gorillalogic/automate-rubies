@@ -7,7 +7,7 @@
 ## Introduction
 Though most of newest FrontEnd Development projects have moved to Javascript Frameworks, leaving Fullstack frameworks (e.g JSP, ASP.Net and Ruby on Rails) in the water, still there are dozens of projects and customers out there with Rails projects; and even some of them have migrated their stacks to have API's based on Rails, and FrontEnd in React, Angular or whatever poison they want to drink. 
 
-Here is the sweetspot where we want to work with. These projects have a strong investment in Ruby code, seasoned developers polished in the arts of Ruby and Testing based on that. Currently is extremely hard to find available Automators with Ruby expertise and here is where this article fits in, Today we will teach you the arts of creating a Testing Project using the Ruby language and the available tools. 
+Here is the sweetspot where we want to work in. These projects have a strong investment in Ruby code, seasoned developers polished in the arts of Ruby and Testing based on that. Currently is extremely hard to find available Automators with Ruby expertise and here is where this article fits in, Today we will teach you the arts of creating a Testing Project using the Ruby language and the available tools. 
 
 This will be our agenda for this article
 - Tools Installation and what do they do
@@ -42,6 +42,7 @@ Most of the libraries available in Ruby are packaged as gems, a gem is a library
 So, let's install our first gem
 
 ```sh
+#/bin/sh
 $ gem install bundler
 ```
 
@@ -51,6 +52,7 @@ $ gem install bundler
 Let's open our project directory and create our Gemfile, this file will allow us to have our list of gems to install, and simplify for future developers to have the environment ready in less time.
 
 ```sh
+#/bin/sh
 $ mkdir Rubytests && cd Rubytests
 $ touch Gemfile
 ```
@@ -59,12 +61,12 @@ Edit the Gemfile and add this lines:
 
 
 ```Gemfile
+#Gemfile
 source 'https://rubygems.org'
 gem 'selenium-webdriver'
 ```
-`source 'https://rubygems.org'` establishes which Gem repository are we going to use, in this case, we will go with the public repository
-
-`gem 'selenium-webdriver'` is the first gem we need, let's talk about it next: 
+- `source 'https://rubygems.org'` establishes which Gem repository are we going to use, in this case, we will go with the public repository
+- `gem 'selenium-webdriver'` is the first gem we need, let's talk about it next: 
 ### Webdriver
 `Webdriver` is a framework that allows to simulate human interaction with a browser, using a couple of lines of code, you can open a webpage, write a query and hit the search button.
 
@@ -73,7 +75,8 @@ Webdriver is mature, has evolved well with time, and it has support for a **doze
 After we have the Gemfile updated, we run the following command:
 
 ```sh
-bundle install
+#/bin/sh
+$ bundle install
 ```
 
 With this, Bundler should have included all gems required.
@@ -84,12 +87,14 @@ ChromeDriver is the official plugin support for the Chrome browser, install it a
 add this line to your `Gemfile`
 
 ```gemfile
+#Gemfile
 gem 'chromedriver-helper'
 ```
 
 and execute again:
 
 ```sh
+#/bin/sh
 $ bundle install
 ```
 
@@ -100,9 +105,10 @@ $ bundle install
 ### The first test:
 Creating a test that verify a web page is as simple as this:
 
-open a console and create a file:
+open a `terminal` in the root folder and create a file:
 
 ```sh
+#/bin/sh
 $ touch Keyboard_test.rb
 ```
 
@@ -133,31 +139,32 @@ banner = driver.find_element(class: 'alert')
 driver.quit
 ```
 
-Execute it using
+In our `terminal` execute:
 
 ```sh
+#/bin/sh
 $ ruby Keyboard_test.rb
 ```
 
 ### Page Object Model
 Though this test is perfectly functional, there are several things that pop up to eye of the seasoned developer:
 
-- What if we need to make more similar tests?, Like testing every single field for negative results.
-- What if the locators change and you have dozens of tests in different files?
-- Having implementation details in test files usually is a bad code smell.
-- There are lots of code that can be reused instead of repeated.
-- There are functions that can be placed in a base class and reuse all the way around.
+- What if we need to make **more similar tests?**, Like testing every single field for negative results.
+- What if the **locators change** and you have dozens of **tests** in **different files**?
+- Having implementation details in test files usually is a **bad code smell**.
+- There are lots of code that can be **reused** instead of **repeated**.
+- The **Webdriver** code can be placed in a base class and reuse all the way around.
 
 Here is where we will start improving our code.
 
-The **Page Object Model** is a powerful pattern that allows to **centralize business logic** in classes that are specialized for a certain part of the Application under test, then allows to use that business logic in different tests, this way we can improve:
+The **Page Object Model** is a powerful pattern that allows to **centralize business logic** in classes that are specialized for a certain part of the **Application under test**, then allows to use that business logic in different tests, this way we can improve:
 
-- how many tests do we write 
-- we mask the access to webdriver functionality
-- reduce the costs included with rewriting accessors
-- build smaller, more maintainable functions that are simpler to understand and modify
+- **how many** tests do we write 
+- we **mask** the **access** to webdriver functionality
+- **reduce** the costs included with **rewriting accessors**
+- build **smaller**, more **maintainable** functions that are simpler to understand and modify
 
-Lets begin with a base page, and check a powerful concept in Ruby, Inheritance:
+Let's begin with a base page, and check a powerful concept in Ruby, Inheritance:
 
 #### Inheritance in OOP
 The basic idea behind Object Oriented languages is to centralize business logic in classes that represent real life elements (Like an employee, a car or a Webpage). In Ruby we can apply this concept in a simple manner:
@@ -165,6 +172,7 @@ The basic idea behind Object Oriented languages is to centralize business logic 
 In our project directory, let's create a folder for our pages, remember, a well organized code is a happy code
 
 ```sh
+#/bin/sh
 $ mkdir pages && cd pages
 $ touch TravelsBasePage.rb
 ```
