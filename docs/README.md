@@ -1,4 +1,4 @@
-# Make Testing Great Again: Powerful UI tests with Ruby, Rspec, Rake and Webdriver
+# Make Tests Great Again: Powerful UI tests with Ruby, Rspec, Rake and Webdriver
 
 #### With :heart: by [Frederik Rodriguez](https://github.com/frederikrodriguezGL)
 ![Image](images/head.png)
@@ -29,7 +29,7 @@ Install Ruby is not hard, actually comes preinstalled in most MacOS X distributi
 Open [rvm.io](https://rvm.io/) and follow the instructions to install the manager
 
 Once installed, just open a terminal and run 
-```bash
+```sh
 $ rvm install ruby
 $ rvm --default use ruby
 ```
@@ -39,9 +39,9 @@ If you use Windows, please install [Ruby for Windows](https://rubyinstaller.org/
 ### Ruby-Gems
 Most of the libraries available in Ruby are packaged as gems, a gem is a library that offers a certain functionality, and you can download it and use it. This concept is similar to `NPM` if you come from the Javascript world.
 
-So, lets install our first gem
+So, let's install our first gem
 
-```bash
+```sh
 $ gem install bundler
 ```
 
@@ -50,7 +50,7 @@ $ gem install bundler
 
 Let's open our project directory and create our Gemfile, this file will allow us to have our list of gems to install, and simplify for future developers to have the environment ready in less time.
 
-```bash
+```sh
 $ mkdir Rubytests && cd Rubytests
 $ touch Gemfile
 ```
@@ -72,7 +72,7 @@ Webdriver is mature, has evolved well with time, and it has support for a **doze
 
 After we have the Gemfile updated, we run the following command:
 
-```bash
+```sh
 bundle install
 ```
 
@@ -81,7 +81,7 @@ With this, Bundler should have included all gems required.
 ### ChromeDriver
 ChromeDriver is the official plugin support for the Chrome browser, install it and we can control Chrome
 
-add this line to your Gemfile
+add this line to your `Gemfile`
 
 ```gemfile
 gem 'chromedriver-helper'
@@ -89,8 +89,8 @@ gem 'chromedriver-helper'
 
 and execute again:
 
-```bash
-bundle install
+```sh
+$ bundle install
 ```
 
 
@@ -99,6 +99,14 @@ bundle install
 
 ### The first test:
 Creating a test that verify a web page is as simple as this:
+
+open a console and create a file:
+
+```sh
+$ touch Keyboard_test.rb
+```
+
+And write the following code into the `Keyboard_test.rb`
 
 ```ruby
 # The libraries we need, for the tests we build.
@@ -125,6 +133,11 @@ banner = driver.find_element(class: 'alert')
 driver.quit
 ```
 
+Execute it using
+
+```sh
+$ ruby Keyboard_test.rb
+```
 
 ### Page Object Model
 Though this test is perfectly functional, there are several things that pop up to eye of the seasoned developer:
@@ -137,7 +150,12 @@ Though this test is perfectly functional, there are several things that pop up t
 
 Here is where we will start improving our code.
 
-The Page Object Model is a powerful pattern that allows to centralize business logic in classes that are specialized for a certain part of the Application under test, then allows to use that business logic in different tests, this way we can improve how many tests do we write, we mask the access to webdriver functionality, reduce the costs included with rewriting accessors and build smaller, more maintainable functions that are simpler to understand and modify
+The **Page Object Model** is a powerful pattern that allows to **centralize business logic** in classes that are specialized for a certain part of the Application under test, then allows to use that business logic in different tests, this way we can improve:
+
+- how many tests do we write 
+- we mask the access to webdriver functionality
+- reduce the costs included with rewriting accessors
+- build smaller, more maintainable functions that are simpler to understand and modify
 
 Lets begin with a base page, and check a powerful concept in Ruby, Inheritance:
 
@@ -146,7 +164,7 @@ The basic idea behind Object Oriented languages is to centralize business logic 
 
 In our project directory, let's create a folder for our pages, remember, a well organized code is a happy code
 
-```bash
+```sh
 $ mkdir pages && cd pages
 $ touch TravelsBasePage.rb
 ```
@@ -178,30 +196,59 @@ end
 
 ```
 
-This first page does not do a lot, yet gives us a glimpse of the power of classes,
+This first page does not do a lot, yet gives us a glimpse of the power of classes.
+
 
 #### Implicit Wait
 ` @driver.manage.timeouts.implicit_wait = 10` 
 
 Here we have a powerful concept of Webdriver, Implicit wait. UI tests usually execute at a blazing pace, and it is common to have failing tests because the **webdriver works faster than the application under test.** Implicit wait orders the webdriver to continuously verify if an element is available and **fail only if more than certain amount of time has passed** (10 seconds in this case)
 
-Implicit wait allows to have cleaner code and sturdier tests that do not fail as often for delays in the application under test.
+**Implicit wait** allows to have cleaner code and sturdier tests that do not fail as often for delays in the application under test.
+
+### Here comes the logger
+We can add logging functionalities to our tests using the simple logger gem
+
+In our `TravelsBasePage.rb` we add the following code
+
+```ruby
+require 'selenium-webdriver'
+require 'logger' # import the logger gem
+
+class TravelsBasePage
+  def initialize(driver)
+    @driver = driver
+    # Basic logger, with output to the console, this logger will be used for all classes that inherit our base class
+    @logger = Logger.new(STDOUT) 
+    @driver.manage.timeouts.implicit_wait = 10 # seconds
+    @driver.manage.window.maximize
+  end
+
+  def getDriver
+    @driver
+  end
+
+  def finalizeDriver
+    @driver.quit
+  end
+end
+```
 
 ### Let's Inherit our base class
-We will use our base class as the starting point for other classes, which would give us more condensed business logic
+We will use our base class as the starting point for other classes, there we will have our Business Logic
 
-But first let's see our Application Under test:
+But first let's see our **Application Under test:**
 ![Image](images/page.png)
 
 At first sight we can see certain logic we can use:
 
 - We want to see which plans are available
 - We would like to verify if an specific plan can be bought at every time
-- We may want to count how many plans are always available, in case we have a moving offer of plans, so lets begin with that:
+- We may want to count how many plans are always available, in case we have a moving offer of plans, so let's begin with that:
 
 Let's go back to the root of our project folder and execute the upcoming commands
 
-```bash
+```sh
 $ touch pages/OrdersPage.rb
 ```
 And put inside the following code
@@ -222,11 +269,12 @@ class OrdersPage < TravelsBasePage # The < symbol expresses inheritance
 end
 ```
 
-We will start our class with the basics, one initializer that will call the parent object and will send a shared Webdriver for it.
+We will start our class with the basics, 
 
-Our class has straight access to our application under test, and it will navigate to it when it starts.
+- one initializer that will call the parent object `super(driver)` and will send a shared Webdriver for it.
+- Our class has straight access to our **application under test** `@url='https://phptravels.com/order/'`, and it will navigate to it when it starts `@driver.navigate.to @url`
 
-Let's add the first business logic method, look for all of the offers:
+Let's add the first business logic method, search for all of the offers:
 
 ```ruby
 require 'selenium-webdriver'
@@ -244,7 +292,8 @@ class OrdersPage < TravelsBasePage # The < symbol expresses inheritance
 #::: NEW CODE :::
 #The list of offers is offered as an array of Elements
    def listOfOffers 
-    offers = @driver.find_elements(css: @offersSelector) # we tell our Webdriver to give us the list of offers using find_elements
+   # we tell our Webdriver to give us the list of offers using find_elements
+    offers = @driver.find_elements(css: @offersSelector) 
     @logger.warn("There are #{offers.count} offers" )
     offers
   end
@@ -258,39 +307,21 @@ end
   
 ```
 
-### Here comes the logger
-We can add logging functionalities to our tests using the simple logger gem
+Our two methods do this:
 
-In our `TravelsBasePage.rb` we add the following code
+- we create a method named `listOfOffers` that returns the list from the page.
+  -  We use `find_elements` to get the list of offers and return it.
+- We create a `getAmountOfOffers` to count the offers we have
+  -  We use the `listOfOffers` method and count the elements in the list.
 
-```ruby
-require 'selenium-webdriver'
-require 'logger' # import the logger gem
 
-class TravelsBasePage
-  def initialize(driver)
-    @driver = driver
-    @logger = Logger.new(STDOUT) # Basic logger, with output to the console, this logger will be used for all classes that inherit our base class
-    @driver.manage.timeouts.implicit_wait = 10 # seconds
-    @driver.manage.window.maximize
-  end
-
-  def getDriver
-    @driver
-  end
-
-  def finalizeDriver
-    @driver.quit
-  end
-end
-```
 
 Now let's create a test that will use our `OrdersPage`.
 
 Go to the root of our project, and execute the following commands:
 
 
-```bash
+```sh
 $ mkdir -p tests/UI @@ cd tests/UI
 $ touch PHPTRAVELS_orders_test.rb 
 ```
@@ -324,11 +355,13 @@ require 'rspec'
 require 'chromedriver-helper'
 require_relative '../../pages/OrdersPage' #Import our PageObject
 
-describe 'Verify PHPTravels.com site' do # All tests begin with describe
+# All tests begin with describe
+describe 'Verify PHPTravels.com site' do 
   
   # Before and After filters execute code that needs to be ran before every test.
   before(:each) do
-    @driver = Selenium::WebDriver.for :chrome # Lets create the driver for each test
+  # Lets create the driver for each test
+    @driver = Selenium::WebDriver.for :chrome 
   end
 
 # End the driver after each test execution to avoid problems with concurrency
@@ -336,11 +369,15 @@ describe 'Verify PHPTravels.com site' do # All tests begin with describe
     @driver.quit
   end
 
-  it 'has 4 types of offers' do # It keyword defines a test
+# < It > keyword defines a test
+  it 'has 4 types of offers' do 
     
     orders = OrdersPage.new(@driver)
-    $result = orders.getAmountOfOffers # this is our Business logic, condensed, no leaking code, no webdriver or locators in our tests
-    expect($result).to be(4) # Powerful assertions built in Rspec
+    
+    # this is our Business logic, condensed, no leaking code, no webdriver or locators in our tests
+    $result = orders.getAmountOfOffers 
+    # Powerful assertions built in Rspec
+    expect($result).to be(4) 
   end
 ```
 This is the basic of Rspec:
@@ -348,10 +385,11 @@ This is the basic of Rspec:
 - you create a suite using `describe`
 - You can add startng and finishing logic using `before` and `after` (This is optional)
 - Each test is written in a `it` method, with a self-explanatory name, that tells what the test is verifying.
+- Remember our [Application under test](#let's-inherit-our-base-class), there were 4 offers, and now we have a test that will verify that.
 
 Let's add more tests:
 
-In our `OrdersPage` file lets add the following logic
+In our `OrdersPage` file let's add the following logic
 
 ```ruby
 require 'selenium-webdriver'
@@ -372,6 +410,11 @@ class OrdersPage < TravelsBasePage
     offers
   end
 
+  def getAmountOfOffers
+    $offers = listOfOffers()
+    $offers.count()
+  end
+
 # ::: NEW CODE :::
   def offersPackage(packageName)
     $itOffers = false
@@ -387,10 +430,6 @@ class OrdersPage < TravelsBasePage
     $itOffers
   end
 
-  def getAmountOfOffers
-    $offers = listOfOffers()
-    $offers.count()
-  end
 end
 ```
 
@@ -398,9 +437,8 @@ This is what our new method does:
 
 -  Uses the `listOfOffers()` logic to get all of the offers
 -  iterate thru them `offers.each do |offer|`  
--  when the name of the offer `$offerText = offer.find_element(css: '.panel-heading')`  matches the parameter `$offerText.text.include? packageName`
--  returns `true`
--  returns `false` if no Offer is sold with the given name.
+-  when the name of the offer `$offerText = offer.find_element(css: '.panel-heading')`  matches the parameter `$offerText.text.include? packageName` returns `true`
+-  returns `false` if no offer is sold with the given name.
   
 
 Now make tests to use the new functionality
@@ -425,7 +463,7 @@ describe 'Verify PHPTravels.com site' do
     expect($result).to be(4)
   end
 
-# NEW CODE
+# ::: NEW CODE :::
   it 'offers Standalone Web Apps' do
     orders = OrdersPage.new(@driver)
     $result = orders.offersPackage('Standalone Web')
@@ -448,16 +486,17 @@ end
 Note that the code is pretty similar, and the reusability is at a high level.
 
 Now let's run our tests, in a terminal in the root of our project execute:
-```bash
+
+```sh
 $ rspec tests/UI/PHPTRAVELS_orders_test.rb
 ```
 
-If everything goes right, A Chrome Browser must pop-up and do automatically all of our tests.
+If everything goes right, A Chrome Browser must show and do automatically all our tests.
 
 ### Reporting.
-Rspec includes a simple suite of reports, that can give us HTML reports of our tests. lets configure it
+Rspec includes a simple suite of reports, that can give us HTML reports of our tests. let's configure it
 
-```bash
+```sh
 $ rspec tests/UI/PHPTRAVELS_orders_test.rb --format html --out results.html
 $ open results.html
 ```
@@ -467,9 +506,9 @@ You should see a nice HTML report with our tests:
 
 
 ### Rake
-Rake is a powerful task executor for Ruby, similar to `Maven` or `NPM`. It has support for dozens of projects and is the standard de-facto for task execution in Ruby projects, let's add it to our project and configure it to execute our tests.
+Rake is a powerful task executor for Ruby, similar to `Maven` or `NPM`. It has support for dozens of projects and is the **standard de-facto** for task execution in Ruby projects, let's add it to our project and configure it to execute our tests.
 
-In the [repo](https://github.com/gorillalogic/automate-rubies) we added some more tests that we will discuss in future articles, yet you can read them for ideas
+In  [Automate-rubies](https://github.com/gorillalogic/automate-rubies) we added some more tests that we will discuss in future articles, yet you can read them for ideas
 
 Lets see the tests we have:
 ![Image](images/test-list.png)
@@ -482,23 +521,23 @@ source 'https://rubygems.org'
 gem 'selenium-webdriver'
 gem 'chromedriver-helper'
 gem 'rspec'
+# Here comes Rake
 gem 'rake'
 ```
 
 Update the dependencies
-```bash
+```sh
 $ bundle install
 ```
 
 
-Now lets create a `Rakefile` in our root folder
-```bash
+Now let's create a `Rakefile` in our root folder
+```sh
 $ touch Rakefile
 ```
 
 and edit the file with the following code:
 ```Rake
-
 require 'rake'
 require 'rake/testtask'
 require 'rspec/core/rake_task'
@@ -507,8 +546,7 @@ require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec) do |t|
 t.pattern = Dir.glob('tests/**/*_test.rb')
 t.rspec_opts = '--format html'
-
- t.rspec_opts << ' --out results.html'
+t.rspec_opts << ' --out results.html'
 # t.rspec_opts << ' more options'
 
 end
@@ -525,7 +563,7 @@ We did the following:
 
 Now we can execute our tests as simple as:
 
-```bash
+```sh
 $ rake
 ```
 We can see the report in html:
@@ -533,19 +571,20 @@ We can see the report in html:
 
 ### What did we learn?
 In this article we learned:
-- The basics of Webdriver and Ruby
-- Improving our code with POM
-- Using Logging, Reporting and Rspec
-- Using Bundler to control our dependencies
-- Use Rake as a Task executor
+- The basics of [Webdriver](#webdriver) and [Ruby](#ruby)
+- Improving our code with [POM](#page-object-model)
+- Using [Logging](#here-comes-the-logger), [Reporting](#reporting) and [Rspec](#rspec)
+- Using [Bundler](#bundler) to control our dependencies
+- Use [Rake](#rake) as a Task executor
   
   
+---
+Don't forget that **You can create basic tests** with the [basic tests](#the-first-test) of this article, yet as your codebase grows, I strongly recommend to follow the Page Object Model Pattern.
 
-Dont forget that You can create basic tests with the [basic tests](#the-first-test) of this article, yet as your codebase grows, I strongly recommend to follow the Page Object Model Pattern.
- 
+---
 
 #### The repo
-All of the code in this article is in this repository: [repo] (https://github.com/gorillalogic/automate-rubies) and it is free to use
+All of the code in this article is in this repository: [repo](https://github.com/gorillalogic/automate-rubies) and it is free to use
 
 
 
